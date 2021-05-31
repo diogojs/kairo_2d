@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+from enum import IntEnum
 
 from kairo.engine.entity import Entity
 
@@ -28,6 +29,12 @@ LEVEL1 = [
     s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s, s,
 ]
 # fmt: on
+
+class TileTypes(IntEnum):
+    GROUND = 0
+    BLOCK = 10
+    INTERACTIVE = 20
+
 
 
 class Tile:

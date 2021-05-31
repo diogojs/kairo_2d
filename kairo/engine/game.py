@@ -8,6 +8,10 @@ if TYPE_CHECKING:
 
 
 class Game:
+    '''
+    Main class for our game loop.
+    '''
+
     tile_size = 32
     map_size = Vector2(32, 16)
     entities: Dict[int, "Entity"] = dict()
@@ -16,6 +20,7 @@ class Game:
         pygame.init()
 
         # Load resources
+        
 
         # Initialize game window
         window_size = Game.map_size.elementwise() * Game.tile_size
