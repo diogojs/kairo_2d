@@ -1,26 +1,30 @@
-from typing import TYPE_CHECKING, Dict, Optional
+from typing import Any, List, TYPE_CHECKING, Dict, Optional
 
 import pygame
 from pygame import Vector2, display, time
+from kairo.resources import MAPS_DIR
 
 if TYPE_CHECKING:
     from kairo.engine.entity import Entity
 
 
 class Game:
-    '''
+    """
     Main class for our game loop.
-    '''
+    """
 
     tile_size = 32
     map_size = Vector2(32, 16)
     entities: Dict[int, "Entity"] = dict()
+    resources: Dict[str, Any] = dict()
 
     def __init__(self):
+
         pygame.init()
 
         # Load resources
-        
+        self.resources = {}
+        # self.resources['tileset'] = pygame.image.load(TILESET_IMAGE).convert()
 
         # Initialize game window
         window_size = Game.map_size.elementwise() * Game.tile_size
@@ -34,7 +38,9 @@ class Game:
         """
         Initialize the Map, Player, and other essential objects.
         """
-        # level1 = Game.new_object(Map(width=MAP_DEFAULT_WIDTH, height=MAP_DEFAULT_HEIGHT))
+        from kairo.map.tilemap import Map
+
+        Game.new_entity(Map(level_file=MAPS_DIR / "level01.map"))
         # circuit = Game.new_object(Circuit.instance())
         # circuit.add_component(Game.new_object(Wire(Point(0, 5))))
         # circuit.add_component(Game.new_object(Wire(Point(1, 5))))
