@@ -4,7 +4,7 @@ import pygame
 from pygame import Vector2, display, time
 
 from kairo.map.tilemap import TILESIZE, Map
-from kairo.resources import MAPS_DIR
+from kairo.resources import IMGS_DIR, MAPS_DIR
 
 if TYPE_CHECKING:
     from kairo.engine.entity import Entity
@@ -23,14 +23,15 @@ class Game:
 
         pygame.init()
 
-        # Load resources
-        self.resources = {}
-        # self.resources['tileset'] = pygame.image.load(TILESET_IMAGE).convert()
-
         # Initialize game window
         window_size = Game.map_size.elementwise() * TILESIZE
         self.window = display.set_mode((int(window_size.x), int(window_size.y)))
         display.set_caption("Kairo")
+
+        # Load resources
+        self.resources['tileset-zeldalike-32px'] = pygame.image.load(
+            IMGS_DIR / 'tileset-zeldalike-32px.png'
+        ).convert()
 
         self.clock = time.Clock()
         self.initialize()
@@ -39,7 +40,7 @@ class Game:
         """
         Initialize the Map, Player, and other essential objects.
         """
-        Game.new_entity(Map(level_file=MAPS_DIR / "level01.map"))
+        Game.new_entity(Map(level_file=MAPS_DIR / "level01.map", resources=self.resources))
         # circuit = Game.new_object(Circuit.instance())
         # circuit.add_component(Game.new_object(Wire(Point(0, 5))))
         # circuit.add_component(Game.new_object(Wire(Point(1, 5))))

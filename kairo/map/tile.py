@@ -23,7 +23,7 @@ class Tile:
     tileset_position: Vector2 = Vector2(0, 0)
     variants: Vector2 = Vector2(1, 1)
 
-    def render(self, surface: Surface, position: Tuple, tileset: Surface) -> None:
+    def render(self, canvas: Surface, position: Tuple, tileset: Surface) -> None:
         from kairo.map.tilemap import TILESIZE
 
         rect = Rect(
@@ -32,7 +32,7 @@ class Tile:
             TILESIZE,
             TILESIZE,
         )
-        surface.blit(tileset, position, rect)
+        canvas.blit(tileset, position, rect)
 
 
 def data_from_dict(description: Dict[str, str]) -> Dict[str, Any]:

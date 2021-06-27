@@ -1,3 +1,5 @@
+from typing import Callable
+
 import pytest
 from pygame import Vector2
 
@@ -45,3 +47,21 @@ def test_data_from_dict() -> None:
     }
 
     assert data_from_dict(raw_description) == expected_data
+
+
+def test_render_tile(use_pygame: Callable) -> None:
+    import pygame
+
+    from kairo._tests import pygame_debug
+    from kairo.resources import IMGS_DIR
+
+    window = use_pygame()
+
+    tile = Tile(name='wall', block=True, tileset_position=Vector2(1, 3))
+
+    tileset = pygame.image.load(IMGS_DIR / 'tileset-zeldalike-32px.png').convert()
+
+    tile.render(window, (0, 0), tileset)
+    pygame.display.flip()
+
+    pygame_debug()
