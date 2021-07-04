@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Callable
 
 import pytest
@@ -49,19 +50,22 @@ def test_data_from_dict() -> None:
     assert data_from_dict(raw_description) == expected_data
 
 
-def test_render_tile(use_pygame: Callable) -> None:
+def test_render_tile(use_pygame: Callable, datadir: Path, image_regression) -> None:
     import pygame
 
-    from kairo._tests import pygame_debug
+    from kairo.map.tilemap import TILESIZE
     from kairo.resources import IMGS_DIR
 
-    window = use_pygame()
-
-    tile = Tile(name='wall', block=True, tileset_position=Vector2(1, 3))
+    window = use_pygame((256, 256))
 
     tileset = pygame.image.load(IMGS_DIR / 'tileset-zeldalike-32px.png').convert()
 
-    tile.render(window, (0, 0), tileset)
-    pygame.display.flip()
+    for i in range(3):
+        for j in range(3):
+            tile = Tile(name='wall', block=True, tileset_position=Vector2(i, j))
+            tile.render(window, (TILESIZE * i * 2, TILESIZE * j * 2), tileset)
 
-    pygame_debug()
+    img_datapath = datadir / 'test_render_tile_image.png'
+    pygame.image.save(window, img_datapath)
+
+    image_regression.check(img_datapath.read_bytes())

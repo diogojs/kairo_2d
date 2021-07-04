@@ -31,7 +31,7 @@ class Game:
         # Load resources
         self.resources['tileset-zeldalike-32px'] = pygame.image.load(
             IMGS_DIR / 'tileset-zeldalike-32px.png'
-        ).convert()
+        ).convert_alpha()
 
         self.clock = time.Clock()
         self.initialize()
@@ -92,6 +92,7 @@ class Game:
         pass
 
     def render(self):
+        self.window.fill((0, 0, 0))
         for entity in self.entities.values():
             entity.render(self.window)
         display.flip()
