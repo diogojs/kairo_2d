@@ -2,6 +2,7 @@ from configparser import ConfigParser
 from pathlib import Path
 from typing import Any, Dict, List
 
+from pygame import Vector2
 from pygame.surface import Surface
 
 from kairo.engine.entity import Entity
@@ -30,7 +31,7 @@ class Map(Entity):
         for y in range(self.height):
             for x in range(self.width):
                 tile = self.get_tile(x, y)
-                tile.render(map_surface, (x, y), self.tileset)
+                tile.render(map_surface, Vector2(x, y), self.tileset)
 
         canvas.blit(map_surface, (0, 0))
 
