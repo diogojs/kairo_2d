@@ -51,6 +51,13 @@ def test_data_from_dict() -> None:
 
 
 def test_render_tile(use_pygame: Callable, datadir: Path, image_regression) -> None:
+    """
+    Test that the tile is correctly rendered in a window (pygame.Surface).
+
+    The tileset is loaded from a sample image, and we draw some tiles in a pre-defined pattern
+    The resulting image is saved using image_regression at the first time the test is ran (life time),
+    all next runs the generated image is just compared with the saved one.
+    """
     import pygame
 
     from kairo.map.tilemap import TILESIZE
@@ -63,7 +70,7 @@ def test_render_tile(use_pygame: Callable, datadir: Path, image_regression) -> N
     for i in range(3):
         for j in range(3):
             tile = Tile(name='wall', block=True, tileset_position=Vector2(i, j))
-            tile.render(window, (TILESIZE * i * 2, TILESIZE * j * 2), tileset)
+            tile.render(window, Vector2(i * 2, j * 2), tileset)
 
     img_datapath = datadir / 'test_render_tile_image.png'
     pygame.image.save(window, img_datapath)

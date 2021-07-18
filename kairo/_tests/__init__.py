@@ -14,3 +14,4 @@ def pygame_debug() -> None:
             if event.type == pygame.QUIT:
                 running = False
                 break
+        pygame.display.flip()
