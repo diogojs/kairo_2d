@@ -23,7 +23,7 @@ class Map(Entity):
 
         self.load_level(level_file, resources)
 
-    def update(self) -> None:
+    def update(self, *args, **kwargs) -> None:
         pass
 
     def render(self, canvas: Surface) -> None:
@@ -36,7 +36,7 @@ class Map(Entity):
         canvas.blit(map_surface, (0, 0))
 
     def is_free(self, x: int, y: int) -> bool:
-        pass
+        return True
 
     def get_tile(self, x: int, y: int) -> Tile:
         """

@@ -1,7 +1,10 @@
 from abc import ABCMeta, abstractmethod
-from typing import Dict, Optional
+from typing import Dict, Optional, List, TYPE_CHECKING
 
 from pygame import Surface, Vector2
+
+if TYPE_CHECKING:
+    from pygame.event import Event
 
 
 class Entity(metaclass=ABCMeta):
@@ -14,8 +17,8 @@ class Entity(metaclass=ABCMeta):
             position = Vector2(position[0], position[1])
 
         self.id = Entity.current_id()
-        self.position = position
-        self.components: Dict[int, Entity] = dict()
+        self.position: Vector2 = position
+        self.components: Dict[str, Entity] = dict()
 
     @classmethod
     def current_id(cls):
@@ -42,8 +45,9 @@ class Entity(metaclass=ABCMeta):
             value = 0
         self.position = Vector2(self.x, value)
 
-    def add_component(self, component):
-        self.components[component.id] = component
+    def add_component(self, component: 'Entity') -> 'Entity':
+        self.components[component.__class__.__name__] = component
+        return component
 
     def remove_component(self, id_or_component):
         if isinstance(id_or_component, int):
@@ -54,9 +58,9 @@ class Entity(metaclass=ABCMeta):
             raise TypeError("Trying to remove component of invalid type.")
 
     @abstractmethod
-    def update(self):
+    def update(self, *args, **kwargs) -> None:
         raise NotImplementedError
 
     @abstractmethod
-    def render(self, surf: Surface):
+    def render(self, surf: Surface) -> None:
         raise NotImplementedError

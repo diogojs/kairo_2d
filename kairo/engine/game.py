@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, Optional
 import pygame
 from pygame import Vector2, display, time
 
+from kairo.engine.inputs import KeyboardInput
 from kairo.map.tilemap import TILESIZE, Map
 from kairo.resources import IMGS_DIR, MAPS_DIR
 
@@ -18,6 +19,7 @@ class Game:
     map_size = Vector2(32, 16)
     entities: Dict[int, "Entity"] = dict()
     resources: Dict[str, Any] = dict()
+    controller_input = KeyboardInput()
 
     def __init__(self):
 
@@ -40,22 +42,33 @@ class Game:
         """
         Initialize the Map, Player, and other essential objects.
         """
+        from kairo.engine.player import Player
+
         Game.new_entity(Map(level_file=MAPS_DIR / "level01.map", resources=self.resources))
         # circuit = Game.new_object(Circuit.instance())
         # circuit.add_component(Game.new_object(Wire(Point(0, 5))))
         # circuit.add_component(Game.new_object(Wire(Point(1, 5))))
 
-        # player = Game.new_object(Player(Point(4, 7)))
+        player = Game.new_entity(Player(Vector2(4, 7)))
         # player.set_circuit(circuit)
 
     @classmethod
-    def new_entity(cls, entity: "Entity") -> "Entity":
+    def new_entity(cls, entity: 'Entity') -> 'Entity':
         cls.entities[entity.id] = entity
         return entity
 
     @classmethod
-    def get_by_id(cls, id: int) -> Optional["Entity"]:
+    def get_by_id(cls, id: int) -> Optional['Entity']:
         return cls.entities.get(id)
+    
+    @classmethod
+    def get_first_by_type(cls, _class: str) -> 'Entity':
+        """
+        Returns the first Entity that is an instance of _class.
+        """
+        for entity in cls.entities.values():
+            if type(entity).__name__ == _class:
+                return entity
 
     def run(self):
         self.running = True
@@ -88,8 +101,9 @@ class Game:
                 elif event.key == pygame.K_DOWN:
                     self.movement.y = 1
 
-    def update(self):
-        pass
+    def update(self, *args, **kwargs) -> None:
+        for entity in self.entities.values():
+            entity.update(keyboard_input=Vector2(self.movement))
 
     def render(self):
         self.window.fill((0, 0, 0))
