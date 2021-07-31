@@ -20,6 +20,7 @@ class Game:
     entities: Dict[int, "Entity"] = dict()
     resources: Dict[str, Any] = dict()
     controller_input = KeyboardInput()
+    clock: Optional[time.Clock] = None
 
     def __init__(self):
 
@@ -38,7 +39,7 @@ class Game:
             IMGS_DIR / 'ss-girl-redhair-blueshirt-64px.png'
         ).convert_alpha()
 
-        self.clock = time.Clock()
+        self.__class__.clock = time.Clock()
         self.initialize()
 
     def initialize(self):
@@ -52,7 +53,7 @@ class Game:
         # circuit.add_component(Game.new_object(Wire(Point(0, 5))))
         # circuit.add_component(Game.new_object(Wire(Point(1, 5))))
 
-        self.player = Game.new_entity(Player(Vector2(4*TILESIZE, 7*TILESIZE)))
+        self.player = Game.new_entity(Player(Vector2(4 * TILESIZE, 7 * TILESIZE)))
         # player.set_circuit(circuit)
 
     @classmethod
@@ -63,15 +64,16 @@ class Game:
     @classmethod
     def get_by_id(cls, id: int) -> Optional['Entity']:
         return cls.entities.get(id)
-    
+
     @classmethod
-    def get_first_by_type(cls, _class: str) -> 'Entity':
+    def get_first_by_type(cls, _class: str) -> Optional['Entity']:
         """
         Returns the first Entity that is an instance of _class.
         """
         for entity in cls.entities.values():
             if type(entity).__name__ == _class:
                 return entity
+        return None
 
     def run(self):
         self.running = True
@@ -100,7 +102,7 @@ class Game:
                     self.player.update_speed(1)
                 elif event.key == pygame.K_KP_MINUS:
                     self.player.update_speed(-1)
-            
+
         self.movement = Vector2(0, 0)
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[pygame.K_LEFT]:
