@@ -34,6 +34,9 @@ class Game:
         self.resources['tileset-zeldalike-32px'] = pygame.image.load(
             IMGS_DIR / 'tileset-zeldalike-32px.png'
         ).convert_alpha()
+        self.resources['girl-redhair-blueshirt-64px'] = pygame.image.load(
+            IMGS_DIR / 'ss-girl-redhair-blueshirt-64px.png'
+        ).convert_alpha()
 
         self.clock = time.Clock()
         self.initialize()
@@ -49,7 +52,7 @@ class Game:
         # circuit.add_component(Game.new_object(Wire(Point(0, 5))))
         # circuit.add_component(Game.new_object(Wire(Point(1, 5))))
 
-        player = Game.new_entity(Player(Vector2(4, 7)))
+        self.player = Game.new_entity(Player(Vector2(4*TILESIZE, 7*TILESIZE)))
         # player.set_circuit(circuit)
 
     @classmethod
@@ -82,8 +85,9 @@ class Game:
         pygame.quit()
 
     def processInput(self):
-        self.movement = Vector2(0, 0)
-
+        """
+        Process keyboard inputs.
+        """
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -92,14 +96,21 @@ class Game:
                 if event.key in (pygame.K_ESCAPE, pygame.K_q):
                     self.running = False
                     break
-                elif event.key == pygame.K_LEFT:
-                    self.movement.x = -1
-                elif event.key == pygame.K_RIGHT:
-                    self.movement.x = 1
-                elif event.key == pygame.K_UP:
-                    self.movement.y = -1
-                elif event.key == pygame.K_DOWN:
-                    self.movement.y = 1
+                elif event.key == pygame.K_KP_PLUS:
+                    self.player.update_speed(1)
+                elif event.key == pygame.K_KP_MINUS:
+                    self.player.update_speed(-1)
+            
+        self.movement = Vector2(0, 0)
+        pressed_keys = pygame.key.get_pressed()
+        if pressed_keys[pygame.K_LEFT]:
+            self.movement.x -= 1
+        elif pressed_keys[pygame.K_RIGHT]:
+            self.movement.x += 1
+        if pressed_keys[pygame.K_UP]:
+            self.movement.y -= 1
+        elif pressed_keys[pygame.K_DOWN]:
+            self.movement.y += 1
 
     def update(self, *args, **kwargs) -> None:
         for entity in self.entities.values():
