@@ -1,3 +1,4 @@
+import random
 from typing import TYPE_CHECKING, Any, Dict, Optional
 
 import pygame
@@ -25,6 +26,7 @@ class Game:
     def __init__(self):
 
         pygame.init()
+        random.seed()
 
         # Initialize game window
         window_size = Game.map_size.elementwise() * TILESIZE

@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import IntEnum
+from random import randrange
 from typing import Any, Dict, Tuple
 
 from pygame import Rect, Vector2
@@ -22,10 +23,17 @@ class Tile:
     block: bool = False
     tileset_position: Vector2 = Vector2(0, 0)
     variants: Vector2 = Vector2(1, 1)
+    animated: bool = False
 
     def render(self, canvas: Surface, position: Vector2, tileset: Surface) -> None:
         from kairo.map.tilemap import TILESIZE
 
+        # if self.animated:
+        #     x_displacement = randrange(int(self.variants.x))
+        #     y_displacement = randrange(int(self.variants.y))
+        #     tileset_position = self.tileset_position + Vector2(x_displacement, y_displacement)
+        # else:
+        #     tileset_position = self.tileset_position
         rect = Rect(
             self.tileset_position.x * TILESIZE,
             self.tileset_position.y * TILESIZE,
@@ -45,6 +53,7 @@ def data_from_dict(description: Dict[str, str]) -> Dict[str, Any]:
         'block': bool_from_string(description.get('block', 'False')),
         'tileset_position': position_from_string(description.get('tile', '0,0')),
         'variants': position_from_string(description.get('variants', '1,1')),
+        'animated': bool_from_string(description.get('animated', 'False')),
     }
     return data
 
