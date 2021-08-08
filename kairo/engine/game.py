@@ -22,6 +22,7 @@ class Game:
     resources: Dict[str, Any] = dict()
     controller_input = KeyboardInput()
     clock: Optional[time.Clock] = None
+    is_debugging = False
 
     def __init__(self):
 
@@ -104,6 +105,8 @@ class Game:
                     self.player.update_speed(1)
                 elif event.key == pygame.K_KP_MINUS:
                     self.player.update_speed(-1)
+                elif event.key == pygame.K_HOME:
+                    self.__class__.is_debugging = not self.__class__.is_debugging
 
         self.movement = Vector2(0, 0)
         pressed_keys = pygame.key.get_pressed()
