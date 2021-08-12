@@ -2,7 +2,7 @@ import random
 from typing import TYPE_CHECKING, Any, Dict, Optional
 
 import pygame
-from pygame import Vector2, display, time
+from pygame import Vector2, display, freetype, time
 
 from kairo.engine.inputs import KeyboardInput
 from kairo.map.tilemap import TILESIZE, Map
@@ -22,11 +22,15 @@ class Game:
     resources: Dict[str, Any] = dict()
     controller_input = KeyboardInput()
     clock: Optional[time.Clock] = None
-    is_debugging = False
+
+    # Debug
+    is_debugging = True
+    debug_font: freetype.Font
 
     def __init__(self):
 
         pygame.init()
+        self.__class__.debug_font = freetype.SysFont('Comic Sans MS', 14)
         random.seed()
 
         # Initialize game window
@@ -127,4 +131,14 @@ class Game:
         self.window.fill((0, 0, 0))
         for entity in self.entities.values():
             entity.render(self.window)
+
+        if self.__class__.is_debugging:
+            text = f'FPS: {int(self.clock.get_fps())}'
+            Game.debug_font.render_to(
+                self.window,
+                dest=(self.window.get_size()[0] - 60, 10),
+                text=text,
+                fgcolor=(0, 255, 0),
+            )
+
         display.flip()

@@ -36,7 +36,8 @@ class Map(Entity):
         canvas.blit(map_surface, (0, 0))
 
     def is_free(self, x: int, y: int) -> bool:
-        return True
+        tile = self.get_tile(x, y)
+        return not tile.block
 
     def get_tile(self, x: int, y: int) -> Tile:
         """

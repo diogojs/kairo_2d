@@ -10,27 +10,37 @@ if TYPE_CHECKING:
 
 
 class Mover(Entity):
-    def __init__(self, speed=5):
-        super().__init__()
+    def __init__(self, speed=5, parent=None):
+        super().__init__(parent=parent)
 
         self.speed = speed
 
     def update(self, *args, **kwargs) -> None:
-        self.position = kwargs.get('position', Vector2(0, 0))
+        if self.parent is None:
+            return
+
         self._current_map: Optional['Map'] = kwargs.get('current_map')
 
         kb_input = kwargs.get('keyboard_input', Vector2(0, 0))
         if self.try_move(kb_input):
-            self.position += kb_input.elementwise() * self.speed
+            self.parent.position += kb_input.elementwise() * self.speed
 
     def try_move(self, movement: Vector2) -> bool:
-        try_x = int((self.position.x + movement.x * self.speed) * TILESIZE)
-        try_y = int((self.position.y + movement.y * self.speed) * TILESIZE)
+        assert self.parent is not None
 
-        if self._current_map is None:
-            return False
+        collider = self.parent.components.get('Collider', None)
+        if collider is None or self._current_map is None:
+            return True
 
-        return self._current_map.is_free(try_x, try_y)
+        for point in ['topleft', 'topright', 'bottomleft', 'bottomright']:
+            x = getattr(collider.rect, point)[0]
+            y = getattr(collider.rect, point)[1]
+            try_x = int((x + movement.x * self.speed) / TILESIZE)
+            try_y = int((y + movement.y * self.speed) / TILESIZE)
+            if not self._current_map.is_free(try_x, try_y):
+                return False
+
+        return True
 
     def render(self, surf: Surface):
         raise NotImplementedError

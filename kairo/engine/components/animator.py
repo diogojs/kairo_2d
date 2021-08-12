@@ -26,8 +26,8 @@ class Animator(Entity):
     WALK_LEFT = 'walk_left'
     WALK_RIGHT = 'walk_right'
 
-    def __init__(self, tileset: Surface, tilesize: int, position_ref: Vector2):
-        super().__init__(position_ref)
+    def __init__(self, tileset: Surface, tilesize: int, parent=None):
+        super().__init__(parent=parent)
 
         self.tileset = tileset
         self.tilesize = tilesize
@@ -113,7 +113,7 @@ class Animator(Entity):
 
     def render(self, surf: Surface):
         sprite = self.current_animation.sprites[self.current_sprite]
-        left_corner = self.position - self.sprite_anchor.elementwise() / 2
+        left_corner = self.parent.position - self.sprite_anchor.elementwise() / 2
         sprite_on_tileset = Rect(
             sprite[1] * self.tilesize,
             sprite[0] * self.tilesize,
