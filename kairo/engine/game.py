@@ -5,7 +5,7 @@ import pygame
 from pygame import Vector2, display, freetype, time
 
 from kairo.engine.inputs import KeyboardInput
-from kairo.map.tilemap import TILESIZE, Map
+from kairo.map.tilemap import TILESIZE, LayerMap, Layers
 from kairo.resources import IMGS_DIR, MAPS_DIR
 
 if TYPE_CHECKING:
@@ -51,17 +51,25 @@ class Game:
 
     def initialize(self):
         """
-        Initialize the Map, Player, and other essential objects.
+        Initialize the LayerMap, Player, and other essential objects.
         """
         from kairo.engine.player import Player
 
-        Game.new_entity(Map(level_file=MAPS_DIR / "level01.map", resources=self.resources))
+        Game.new_entity(LayerMap(level_file=MAPS_DIR / "level01.map", resources=self.resources))
         # circuit = Game.new_object(Circuit.instance())
         # circuit.add_component(Game.new_object(Wire(Point(0, 5))))
         # circuit.add_component(Game.new_object(Wire(Point(1, 5))))
 
         self.player = Game.new_entity(Player(Vector2(4 * TILESIZE, 7 * TILESIZE)))
         # player.set_circuit(circuit)
+
+        Game.new_entity(
+            LayerMap(
+                level_file=MAPS_DIR / "level01.map",
+                resources=self.resources,
+                layer=Layers.FOREGROUND,
+            )
+        )
 
     @classmethod
     def new_entity(cls, entity: 'Entity') -> 'Entity':

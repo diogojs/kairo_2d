@@ -6,7 +6,7 @@ from kairo.engine.entity import Entity
 from kairo.map.tilemap import TILESIZE
 
 if TYPE_CHECKING:
-    from kairo.map.tilemap import Map
+    from kairo.map.tilemap import LayerMap
 
 
 class Mover(Entity):
@@ -19,7 +19,7 @@ class Mover(Entity):
         if self.parent is None:
             return
 
-        self._current_map: Optional['Map'] = kwargs.get('current_map')
+        self._current_map: Optional['LayerMap'] = kwargs.get('current_map')
 
         kb_input = kwargs.get('keyboard_input', Vector2(0, 0))
         if self.try_move(kb_input):

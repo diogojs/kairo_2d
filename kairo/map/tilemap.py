@@ -1,4 +1,5 @@
 from configparser import ConfigParser
+from enum import Enum, auto
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -6,13 +7,22 @@ from pygame import Vector2
 from pygame.surface import Surface
 
 from kairo.engine.entity import Entity
+from kairo.map.loader import position_from_string
 from kairo.map.tile import Tile
 
 TILESIZE = 32
 
 
-class Map(Entity):
-    def __init__(self, level_file: Path, resources: Dict[str, Any]):
+class Layers(Enum):
+    BACKGROUND = auto()
+    DEFAULT = auto()
+    CIRCUIT = auto()
+    PLAYER = auto()
+    FOREGROUND = auto()
+
+
+class LayerMap(Entity):
+    def __init__(self, level_file: Path, resources: Dict[str, Any], layer: Layers = Layers.DEFAULT):
         super().__init__()
 
         #  instance properties
@@ -20,6 +30,7 @@ class Map(Entity):
         self.tiles_registry: Dict[str, Tile] = {}
         self.width = 0
         self.height = 0
+        self.layer = layer
 
         self.load_level(level_file, resources)
 
@@ -33,7 +44,7 @@ class Map(Entity):
                 tile = self.get_tile(x, y)
                 tile.render(map_surface, Vector2(x, y), self.tileset)
 
-        canvas.blit(map_surface, (0, 0))
+        canvas.blit(map_surface, (self.position.x * TILESIZE, self.position.y * TILESIZE))
 
     def is_free(self, x: int, y: int) -> bool:
         tile = self.get_tile(x, y)
@@ -46,9 +57,7 @@ class Map(Entity):
         return self.tiles_registry[(self.map[y][x])]
 
     def load_level(self, level_file: Path, resources: Dict[str, Any]):
-        from kairo.engine.game import Game
-        from kairo.map.tile import data_from_dict
-        from kairo.resources import IMGS_DIR
+        from kairo.map.loader import data_from_dict
 
         self.tiles_registry = {}
         self.map = []
@@ -57,7 +66,12 @@ class Map(Entity):
 
         tileset_name = parser.get("level", "tileset")
         self.tileset = resources[tileset_name]
-        self.map = parser.get("level", "map").split("\n")
+
+        layer_name = self.layer.name.lower()
+        self.map = parser.get(layer_name, "map").split("\n")
+
+        if parser.has_option(layer_name, 'position'):
+            self.position = position_from_string(parser.get(layer_name, 'position'))
 
         # Load Tiles
         for section in parser.sections():

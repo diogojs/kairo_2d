@@ -1,5 +1,7 @@
 [level]
 tileset = tileset-zeldalike-32px
+
+[default]
 map = hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
       hqwwwwwwwwwwwwwwwwwwwwwwwwwwwweh
       ha............................dh
@@ -11,11 +13,16 @@ map = hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
       hzxxxxxxE.....................dh
       hqwwwwwea.....................dh
       ha.....da.....................dh
-      ha.....da...............s.....dh
-      ha.....ik.....................dh
+      ha......................s.....dh
+      ha............................dh
       ha.....da.....................dh
       hzxxxxxczxxxxxxxxxxxxxxxxxxxxxch
       hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+[foreground]
+position = 7,11
+map = da
+      ik
 
 [.]
 name = floor

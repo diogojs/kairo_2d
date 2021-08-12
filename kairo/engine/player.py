@@ -14,7 +14,7 @@ class Player(Entity):
         super().__init__(position)
 
         # References to other Entities
-        self._current_map = Game.get_first_by_type('Map')
+        self._current_map = Game.get_first_by_type('LayerMap')
         tileset = Game.resources['girl-redhair-blueshirt-64px']
 
         # Components

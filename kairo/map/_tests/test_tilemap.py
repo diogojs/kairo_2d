@@ -6,7 +6,7 @@ import pytest
 from pygame import Vector2
 
 from kairo.map.tile import Tile
-from kairo.map.tilemap import Map
+from kairo.map.tilemap import LayerMap
 
 
 @pytest.fixture
@@ -63,12 +63,12 @@ def sample_map_file(datadir: Path) -> Path:
 
 def test_load_level(sample_map_file: Path) -> None:
     """
-    Test that loading a sample map file correctly sets a Map properties and tiles
+    Test that loading a sample map file correctly sets a LayerMap properties and tiles
     """
 
     resources = {'sample-tileset': 'fake loaded image'}
 
-    m = Map(sample_map_file, resources)
+    m = LayerMap(sample_map_file, resources)
 
     assert m.tileset == 'fake loaded image'
     assert m.width == 5
@@ -100,7 +100,7 @@ def test_render_tilemap(
 
     resources = {'sample-tileset': tileset}
 
-    m = Map(sample_map_file, resources)
+    m = LayerMap(sample_map_file, resources)
     m.render(window)
 
     # pygame_debug()

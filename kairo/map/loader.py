@@ -1,5 +1,6 @@
-from pygame import Vector2
 from typing import Any, Dict
+
+from pygame import Vector2
 
 
 def data_from_dict(description: Dict[str, str]) -> Dict[str, Any]:

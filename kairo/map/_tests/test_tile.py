@@ -4,7 +4,8 @@ from typing import Callable
 import pytest
 from pygame import Vector2
 
-from kairo.map.tile import Tile, data_from_dict
+from kairo.map.loader import data_from_dict
+from kairo.map.tile import Tile
 
 
 def test_tile_default_values() -> None:
@@ -60,7 +61,6 @@ def test_render_tile(use_pygame: Callable, datadir: Path, image_regression) -> N
     """
     import pygame
 
-    from kairo.map.tilemap import TILESIZE
     from kairo.resources import IMGS_DIR
 
     window = use_pygame((256, 256))
