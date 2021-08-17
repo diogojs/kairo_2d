@@ -1,5 +1,23 @@
 [level]
-tileset = tileset-zeldalike-32px
+tileset = tileset-zeldalike-32px-alpha
+
+[background]
+map = ................................
+      ................................
+      ................................
+      ................................
+      ................................
+      ................................
+      ................................
+      ................................
+      ................................
+      ................................
+      ................................
+      ................................
+      ................................
+      ................................
+      ................................
+      ................................
 
 [default]
 map = hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
@@ -21,7 +39,7 @@ map = hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 
 [foreground]
 position = 7,11
-map = da
+map = IK
       ik
 
 [.]
@@ -92,12 +110,23 @@ tile = 4,1
 [i]
 name = open-door-east
 block: false
-tile = 0,11
+tile = 0,10
+
+[I]
+name = open-door-east-up
+block: false
+tile = 0,9
 
 [k]
 name = open-door-west
 block: false
-tile = 1,12
+tile = 10,10
+variants = 3,1
+
+[K]
+name = open-door-west-up
+block: false
+tile = 10,9
 variants = 3,1
 
 [b]
