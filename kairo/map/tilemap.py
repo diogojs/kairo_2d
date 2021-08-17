@@ -3,7 +3,7 @@ from enum import Enum, auto
 from pathlib import Path
 from typing import Any, Dict, List
 
-from pygame import Vector2
+from pygame import SRCALPHA, Vector2
 from pygame.surface import Surface
 
 from kairo.engine.entity import Entity
@@ -38,7 +38,7 @@ class LayerMap(Entity):
         pass
 
     def render(self, canvas: Surface) -> None:
-        map_surface = Surface((self.width * TILESIZE, self.height * TILESIZE))
+        map_surface = Surface((self.width * TILESIZE, self.height * TILESIZE), SRCALPHA)
         for y in range(self.height):
             for x in range(self.width):
                 tile = self.get_tile(x, y)
@@ -47,6 +47,9 @@ class LayerMap(Entity):
         canvas.blit(map_surface, (self.position.x * TILESIZE, self.position.y * TILESIZE))
 
     def is_free(self, x: int, y: int) -> bool:
+        if not (0 <= x < self.width) or not (0 <= y < self.height):
+            return True
+
         tile = self.get_tile(x, y)
         return not tile.block
 

@@ -1,5 +1,5 @@
 import random
-from typing import TYPE_CHECKING, Any, Dict, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 import pygame
 from pygame import Vector2, display, freetype, time
@@ -42,6 +42,9 @@ class Game:
         self.resources['tileset-zeldalike-32px'] = pygame.image.load(
             IMGS_DIR / 'tileset-zeldalike-32px.png'
         ).convert_alpha()
+        self.resources['tileset-zeldalike-32px-alpha'] = pygame.image.load(
+            IMGS_DIR / 'tileset-zeldalike-32px-alpha.png'
+        ).convert_alpha()
         self.resources['girl-redhair-blueshirt-64px'] = pygame.image.load(
             IMGS_DIR / 'ss-girl-redhair-blueshirt-64px.png'
         ).convert_alpha()
@@ -55,7 +58,24 @@ class Game:
         """
         from kairo.engine.player import Player
 
-        Game.new_entity(LayerMap(level_file=MAPS_DIR / "level01.map", resources=self.resources))
+        maps = [
+            Game.new_entity(
+                LayerMap(
+                    level_file=MAPS_DIR / "level01.map",
+                    resources=self.resources,
+                    layer=Layers.BACKGROUND,
+                )
+            )
+        ]
+        maps.append(
+            Game.new_entity(
+                LayerMap(
+                    level_file=MAPS_DIR / "level01.map",
+                    resources=self.resources,
+                    layer=Layers.DEFAULT,
+                )
+            )
+        )
         # circuit = Game.new_object(Circuit.instance())
         # circuit.add_component(Game.new_object(Wire(Point(0, 5))))
         # circuit.add_component(Game.new_object(Wire(Point(1, 5))))
@@ -63,13 +83,19 @@ class Game:
         self.player = Game.new_entity(Player(Vector2(4 * TILESIZE, 7 * TILESIZE)))
         # player.set_circuit(circuit)
 
-        Game.new_entity(
-            LayerMap(
-                level_file=MAPS_DIR / "level01.map",
-                resources=self.resources,
-                layer=Layers.FOREGROUND,
+        maps.append(
+            Game.new_entity(
+                LayerMap(
+                    level_file=MAPS_DIR / "level01.map",
+                    resources=self.resources,
+                    layer=Layers.FOREGROUND,
+                )
             )
         )
+
+        # After adding all layers, we have to update player
+        # It's better to do it here than to check it in every update iteration
+        self.player.update_maps(maps)
 
     @classmethod
     def new_entity(cls, entity: 'Entity') -> 'Entity':
@@ -89,6 +115,13 @@ class Game:
             if type(entity).__name__ == _class:
                 return entity
         return None
+
+    @classmethod
+    def get_all_by_type(cls, _class: str) -> List['Entity']:
+        """
+        Returns all Game Entities that are instances of _class.
+        """
+        return [entity for entity in cls.entities.values() if type(entity).__name__ == _class]
 
     def run(self):
         self.running = True
@@ -136,7 +169,7 @@ class Game:
             entity.update(keyboard_input=Vector2(self.movement))
 
     def render(self):
-        self.window.fill((0, 0, 0))
+        self.window.fill((0, 0, 220))
         for entity in self.entities.values():
             entity.render(self.window)
 

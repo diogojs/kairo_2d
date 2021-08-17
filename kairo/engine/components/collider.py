@@ -1,16 +1,20 @@
-from typing import Optional
+from typing import List, Optional
 
 from pygame import Rect, Surface, draw
 
 from kairo.engine.entity import Entity
 from kairo.engine.game import Game
+from kairo.map.tilemap import Layers
 
 
 class Collider(Entity):
-    def __init__(self, box: Rect, parent: Optional[Entity] = None):
+    def __init__(
+        self, box: Rect, parent: Optional[Entity] = None, layers: List[Layers] = [Layers.DEFAULT]
+    ):
         super().__init__(parent=parent)
 
         self.box = box
+        self.layers = layers
 
     @property
     def rect(self):
