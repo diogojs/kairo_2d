@@ -107,7 +107,7 @@ class Game:
         return cls.entities.get(id)
 
     @classmethod
-    def get_first_by_type(cls, _class: str) -> Optional['Entity']:
+    def get_first_by_type(cls, _class: str) -> Any:
         """
         Returns the first Entity that is an instance of _class.
         """
@@ -117,7 +117,7 @@ class Game:
         return None
 
     @classmethod
-    def get_all_by_type(cls, _class: str) -> List['Entity']:
+    def get_all_by_type(cls, _class: str) -> List[Any]:
         """
         Returns all Game Entities that are instances of _class.
         """

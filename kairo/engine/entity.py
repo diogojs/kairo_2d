@@ -18,7 +18,7 @@ class Entity(metaclass=ABCMeta):
 
         self.id = Entity.current_id()
         self.position: Vector2 = position
-        self.components: Dict[str, Entity] = dict()
+        self.components: Dict[str, Any] = dict()
 
     @classmethod
     def current_id(cls):

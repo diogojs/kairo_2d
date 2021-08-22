@@ -7,7 +7,6 @@ from pygame import SRCALPHA, Vector2
 from pygame.surface import Surface
 
 from kairo.engine.entity import Entity
-from kairo.map.loader import position_from_string
 from kairo.map.tile import Tile
 
 TILESIZE = 32
@@ -60,7 +59,7 @@ class LayerMap(Entity):
         return self.tiles_registry[(self.map[y][x])]
 
     def load_level(self, level_file: Path, resources: Dict[str, Any]):
-        from kairo.map.loader import data_from_dict
+        from kairo.map.loader import data_from_dict, position_from_string
 
         self.tiles_registry = {}
         self.map = []

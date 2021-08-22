@@ -34,7 +34,7 @@ class Player(Entity):
         )
 
     def update(self, *args, **kwargs) -> None:
-        kb_input = kwargs.get('keyboard_input')
+        kb_input = kwargs.get('keyboard_input', Vector2(0, 0))
 
         old_position = Vector2(self.position)
         # Component responsible for moving the Player

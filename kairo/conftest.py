@@ -1,6 +1,7 @@
 # Fixtures configuration for pytest
 
-from typing import Callable, Generator, Tuple
+from pathlib import Path
+from typing import Generator, Tuple
 
 import pytest
 
@@ -27,3 +28,60 @@ def use_pygame() -> Generator:
     yield set_pygame_window
 
     pygame.quit()
+
+
+@pytest.fixture
+def sample_map_file(datadir: Path) -> Path:
+    """
+    Writes a file with data for a sample map.
+    Returns the path of the saved file.
+    """
+    from textwrap import dedent
+
+    level_file = datadir / 'sample.map'
+
+    sample_map_content = dedent(
+        """
+        [level]
+        tileset = sample-tileset
+
+        [default]
+        map = hhhhhh
+              hwwwwh
+              ha..dh
+              ha..dh
+              hwwwwh
+
+        [.]
+        name = floor
+        block: false
+        tile = 6,0
+        variants = 7,4
+
+        [h]
+        name = hole
+        block: false
+        tile = 1,1
+
+        [w]
+        name = north-wall
+        block: true
+        tile = 0,3
+        variants = 3,0
+
+        [a]
+        name = west-wall
+        block: true
+        tile = 0,4
+        variants = 1,3
+
+        [d]
+        name = east-wall
+        block: true
+        tile = 1,4
+        variants = 1,3
+        """
+    )
+
+    level_file.write_text(sample_map_content)
+    return level_file

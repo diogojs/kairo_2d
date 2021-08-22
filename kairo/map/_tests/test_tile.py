@@ -46,6 +46,7 @@ def test_data_from_dict() -> None:
         'block': False,
         'tileset_position': Vector2(4, 0),
         'variants': Vector2(1, 3),
+        'animated': False,
     }
 
     assert data_from_dict(raw_description) == expected_data
