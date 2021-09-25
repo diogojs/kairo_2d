@@ -76,7 +76,7 @@ class Game:
                 )
             )
         )
-        # circuit = Game.new_object(Circuit.instance())
+        circuit = Game.new_object(Circuit.instance())
         # circuit.add_component(Game.new_object(Wire(Point(0, 5))))
         # circuit.add_component(Game.new_object(Wire(Point(1, 5))))
 
