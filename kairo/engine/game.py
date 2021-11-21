@@ -21,7 +21,7 @@ class Game:
     entities: Dict[int, "Entity"] = dict()
     resources: Dict[str, Any] = dict()
     controller_input = KeyboardInput()
-    clock: Optional[time.Clock] = None
+    clock: time.Clock = time.Clock()
 
     # Debug
     is_debugging = True
@@ -49,7 +49,6 @@ class Game:
             IMGS_DIR / 'ss-girl-redhair-blueshirt-64px.png'
         ).convert_alpha()
 
-        self.__class__.clock = time.Clock()
         self.initialize()
 
     def initialize(self):

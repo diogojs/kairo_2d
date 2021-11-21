@@ -23,11 +23,12 @@ class Circuit(Entity):
         self.stack: MutableSequence = deque()
         self.toggled_last_update = False
 
-    def add_connector(self, connector: Connector) -> None:
+    def add_connector(self, connector: Connector) -> Connector:
         previous = self.connectors[(int(connector.position.x), int(connector.position.y))]
 
         self.connectors[(int(connector.position.x), int(connector.position.y))] = connector
         connector.setup_initial_connections()
+        return connector
 
     def get_connector(self, position: Vector2) -> Optional[Connector]:
         return self.connectors[(int(position.x), int(position.y))]

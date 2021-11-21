@@ -75,3 +75,6 @@ class Connector(Entity):
     def render(self, canvas: Surface) -> None:
         for component in self.components.values():
             component.render(canvas)
+
+    def is_on(self) -> bool:
+        return self.state > 0
