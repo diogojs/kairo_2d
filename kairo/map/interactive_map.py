@@ -1,5 +1,4 @@
 from configparser import ConfigParser
-from enum import Enum, auto
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -8,6 +7,7 @@ from pygame.surface import Surface
 
 from kairo.circuit.connector import Connector
 from kairo.engine.entity import Entity
+from kairo.map.tile import Tile
 from kairo.map.tilemap import TILESIZE, Layers
 
 
@@ -15,11 +15,12 @@ class InteractiveMap(Entity):
     '''
     Represents a sparse map/board with interactive objects (e.g. the circuit).
     '''
+
     def __init__(self, level_file: Path, resources: Dict[str, Any], layer: Layers = Layers.CIRCUIT):
         super().__init__()
 
         #  instance properties
-        self.map: List[Connector] = []
+        self.map: List[str] = []
         self.width = 0
         self.height = 0
         self.layer = layer
@@ -75,4 +76,4 @@ class InteractiveMap(Entity):
         """
         Returns what's at the specified position on the map.
         """
-        return self.tiles_registry[(self.map[y][x])]
+        return self.tiles_registry[(self.map[y * self.width + x])]

@@ -26,6 +26,7 @@ class LayerMap(Entity):
     Tile instances are registered in the property tiles_registry,
     and the map property is a list with just the type of the tile.
     '''
+
     def __init__(self, level_file: Path, resources: Dict[str, Any], layer: Layers = Layers.DEFAULT):
         super().__init__()
 

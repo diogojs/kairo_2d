@@ -25,7 +25,7 @@ class Game:
 
     # Debug
     is_debugging = True
-    debug_font: freetype.Font
+    debug_font: freetype.Font  # type: ignore[name-defined]
 
     def __init__(self):
 
@@ -56,6 +56,9 @@ class Game:
         """
         Initialize the LayerMap, Player, and other essential objects.
         """
+        from kairo.circuit.circuit import Circuit
+        from kairo.circuit.power import Power
+        from kairo.circuit.wire import Wire
         from kairo.engine.player import Player
 
         maps = [
@@ -76,9 +79,13 @@ class Game:
                 )
             )
         )
-        circuit = Game.new_object(Circuit.instance())
-        # circuit.add_component(Game.new_object(Wire(Point(0, 5))))
-        # circuit.add_component(Game.new_object(Wire(Point(1, 5))))
+        circuit = Game.new_entity(Circuit())
+        circuit.add_connector(Wire(False, Vector2(0, 5), circuit))
+        circuit.add_connector(Wire(False, Vector2(1, 5), circuit))
+        circuit.add_connector(Wire(False, Vector2(1, 6), circuit))
+        circuit.add_connector(Wire(False, Vector2(1, 7), circuit))
+        circuit.add_connector(Wire(False, Vector2(0, 7), circuit))
+        circuit.add_connector(Power(False, Vector2(2, 6), circuit))
 
         self.player = Game.new_entity(Player(Vector2(4 * TILESIZE, 7 * TILESIZE)))
         # player.set_circuit(circuit)
