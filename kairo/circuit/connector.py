@@ -28,7 +28,7 @@ class Connector(Entity):
         self.connections: List[Connector] = []
 
         # graphical stuff
-        tileset = Game.resources['girl-redhair-blueshirt-64px']
+        tileset = Game.resources.get('girl-redhair-blueshirt-64px')
         self.animator = self.add_component(Animator(tileset=tileset, tilesize=64, parent=self))
 
     def update(self, *args, **kwargs) -> None:
@@ -64,7 +64,7 @@ class Connector(Entity):
 
     def setup_initial_connections(self) -> None:
         for direction in DIRECTION.values():
-            neighbour = self.circuit.get_component(self.position + direction)
+            neighbour = self.circuit.get_connector(self.position + direction)
             if neighbour is not None:
                 self.connect(neighbour)
 

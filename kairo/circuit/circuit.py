@@ -24,14 +24,16 @@ class Circuit(Entity):
         self.toggled_last_update = False
 
     def add_connector(self, connector: Connector) -> Connector:
-        previous = self.connectors[(int(connector.position.x), int(connector.position.y))]
+        previous = self.connectors.get((int(connector.position.x), int(connector.position.y)))
+        if previous:
+            print(f"Previous connector in {connector.position} is not None")
 
         self.connectors[(int(connector.position.x), int(connector.position.y))] = connector
         connector.setup_initial_connections()
         return connector
 
     def get_connector(self, position: Vector2) -> Optional[Connector]:
-        return self.connectors[(int(position.x), int(position.y))]
+        return self.connectors.get((int(position.x), int(position.y)))
 
     def update(self, *args, **kwargs) -> None:
         '''
@@ -42,7 +44,7 @@ class Circuit(Entity):
         self.toggled_last_update = False
         for conn in self.connectors.values():
             if isinstance(conn, Power):
-                conn.update(self.state)
+                conn.update(state=self.state)
 
     def late_update(self):
         self.clear()

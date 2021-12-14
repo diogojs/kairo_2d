@@ -1,20 +1,20 @@
-from typing import Dict, Optional
 from time import time
+from typing import Dict, Optional
 
 from kairo.engine import STD_DELTA
 
 
-class Event():
+class Event:
     def __init__(self, name: str = ''):
         self.name = name
 
 
-class EventQueue():
+class EventQueue:
     def __init__(self):
         self.events: Dict[float, Event] = {}
         self.frame_time = time()
         self.tick = 0.25
-    
+
     def add(self, event: Event, *, timestep: Optional[float] = None, frames_ahead: int = 0) -> None:
         if frames_ahead:
             event_time = self.frame_time + frames_ahead * self.tick
@@ -46,6 +46,5 @@ def test_event_queue():
     for event in queue.events.values():
         if event.name:
             counter += 1
-    
-    assert counter == 3
 
+    assert counter == 3

@@ -4,29 +4,26 @@ from typing import Any, Callable
 
 import pytest
 from pygame import Vector2
+
 from kairo.circuit.circuit import Circuit
 from kairo.circuit.power import Power
 from kairo.circuit.wire import Wire
+from kairo.engine.event_queue import EventQueue
 
-from kairo.map.tile import Tile
-from kairo.map.tilemap import LayerMap
 
 @pytest.fixture
 def event_queue() -> EventQueue:
     return EventQueue()
 
 
-
-def _setup_circuit() -> Circuit:
+def _setup_circuit(event_queue: EventQueue) -> Circuit:
     '''
     ########
-    ####|###
+    ####|#-|
     #P--|###
     ####|-##
     ########
-
     '''
-    
     circuit = Circuit(event_queue)
     connectors = []
     connectors.append(circuit.add_connector(Power(position=Vector2(1, 2), parent=circuit)))
@@ -36,45 +33,34 @@ def _setup_circuit() -> Circuit:
     connectors.append(circuit.add_connector(Wire(position=Vector2(4, 2), parent=circuit)))
     connectors.append(circuit.add_connector(Wire(position=Vector2(4, 3), parent=circuit)))
     connectors.append(circuit.add_connector(Wire(position=Vector2(5, 3), parent=circuit)))
+    
+    # Connectors id > 15 will be disconnected from the others
+    connectors.append(circuit.add_connector(Wire(position=Vector2(6, 1), parent=circuit)))
+    connectors.append(circuit.add_connector(Wire(position=Vector2(7, 1), parent=circuit)))
+
     return circuit
 
 
-def test_circuit() -> None:
+def test_circuit(event_queue: EventQueue) -> None:
     """
     Creates a circuit with some components and checks that everything is on its place.
     """
-    event_queue = EventQueue()
-    circuit = _setup_circuit()
+    circuit = _setup_circuit(event_queue)
 
-    power = circuit.get_connector((1, 2))
+    power = circuit.get_connector(Vector2(1, 2))
+    assert power is not None
     assert not power.is_on()
 
     circuit.toggle()
     circuit.update()
-    assert not power.is_on()
-
-
-def test_render_tilemap(
-    use_pygame: Callable, datadir: Path, sample_map_file: Path, image_regression: Any
-) -> None:
-    import pygame
-
-    from kairo.resources import IMGS_DIR
-
-    # from kairo._tests import pygame_debug
-
-    window = use_pygame((256, 256))
-
-    tileset = pygame.image.load(IMGS_DIR / 'tileset-zeldalike-32px.png').convert()
-
-    resources = {'sample-tileset': tileset}
-
-    m = LayerMap(sample_map_file, resources)
-    m.render(window)
-
-    # pygame_debug()
-
-    img_datapath = datadir / 'test_render_tilemap_image.png'
-    pygame.image.save(window, img_datapath)
-
-    image_regression.check(img_datapath.read_bytes())
+    assert power.is_on()
+    for connector in circuit.connectors.values():
+        if connector.id > 15:
+            assert not connector.is_on()
+        else:
+            assert connector.is_on()
+    
+    circuit.toggle()
+    circuit.update()
+    for connector in circuit.connectors.values():
+        assert not connector.is_on()

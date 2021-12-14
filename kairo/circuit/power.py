@@ -7,4 +7,4 @@ from kairo.circuit.connector import Connector
 
 class Power(Connector):
     def __init__(self, state: int = 0, position: Optional[Vector2] = None, parent=None):
-        super().__init__(state, position)
+        super().__init__(state, position, parent)
