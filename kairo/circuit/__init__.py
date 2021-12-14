@@ -1,2 +1,2 @@
-OFF = False
-ON = True
+OFF = 0
+ON = 1

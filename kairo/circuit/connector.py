@@ -1,6 +1,6 @@
-from pathlib import Path
 from typing import List, Optional
 
+import pygame
 from pygame import Vector2
 from pygame.surface import Surface
 
@@ -28,29 +28,37 @@ class Connector(Entity):
         self.connections: List[Connector] = []
 
         # graphical stuff
-        tileset = Game.resources.get('girl-redhair-blueshirt-64px')
+        tileset = Game.resources.get('girl-redhair-blueshirt-64px')  # type: ignore
         self.animator = self.add_component(Animator(tileset=tileset, tilesize=64, parent=self))
 
     def update(self, *args, **kwargs) -> None:
         if self.visited:
             return
 
-        state = kwargs.get('state')
-
         self.visited = True
         self.circuit.stack.append(self)
 
-        # Update state
-        if state in [ON, OFF]:
-            self.state = state
-        else:
-            self.state = OFF
+        if not self._update(*args, **kwargs):
+            state = kwargs.get('state')
 
-        for connection in self.connections:
-            connection.update(state=self.state)
+            # Update state
+            if state in [ON, OFF]:
+                self.state = state
+            else:
+                self.state = OFF
+
+            for connection in self.connections:
+                connection.update(state=self.state, connector=self)
 
         if len(self.parent.stack) > 0:
             self.parent.stack.pop()
+
+    def _update(self, *args, **kwargs) -> bool:
+        '''
+        Override it if there is some custom logic that should be applied on update.
+        Return True if custom update, else just return False.
+        '''
+        return False
 
     def connect(self, other: 'Connector') -> None:
         if other not in self.connections:

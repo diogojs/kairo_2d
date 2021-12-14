@@ -85,3 +85,11 @@ def sample_map_file(datadir: Path) -> Path:
 
     level_file.write_text(sample_map_content)
     return level_file
+
+
+@pytest.fixture(scope="function", autouse=True)
+def teardown():
+    yield
+    from kairo.engine.entity import Entity
+
+    Entity._current_id = 0
